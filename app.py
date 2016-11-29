@@ -14,11 +14,12 @@ from flask_sockets import Sockets
 
 from leancloud import Object
 from leancloud import LeanCloudError
+from leancloud import Engine
 
 
 app = Flask(__name__)
 sockets = Sockets(app)
-app.secret_key = 'veryverysecret'
+engine = Engine(app)
 
 
 @app.route('/')
