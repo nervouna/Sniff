@@ -19,6 +19,10 @@ app = Flask(__name__)
 sockets = Sockets(app)
 
 
+Visits = Object.extend('Visits')
+Shortened = Object.extend('Shortened')
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -36,7 +40,6 @@ def shorten():
 @app.route('/<surl>')
 def go(surl):
     long_url = get_long(surl)
-    Visits = Object.extend('Visits')
     visit = Visits()
     visit.set('target', long_url)
     try:
@@ -96,7 +99,6 @@ def gen_short_url(lurl):
             pass
         else:
             raise e
-    Shortened = Object.extend('Shortened')
     shortened = Shortened()
     # Hard coded size. Fix later ( or never )
     size = 4
