@@ -16,7 +16,6 @@ from leancloud import LeanCloudError
 
 
 app = Flask(__name__)
-sockets = Sockets(app)
 
 
 Visits = Object.extend('Visits')
