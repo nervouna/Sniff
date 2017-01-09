@@ -10,16 +10,13 @@ from flask import request
 from flask import redirect
 from flask import flash
 from flask import url_for
-from flask_sockets import Sockets
 
 from leancloud import Object
 from leancloud import LeanCloudError
-from leancloud import Engine
 
 
 app = Flask(__name__)
 sockets = Sockets(app)
-engine = Engine(app)
 
 
 @app.route('/')

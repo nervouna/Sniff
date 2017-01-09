@@ -8,7 +8,6 @@ import os
 import leancloud
 
 from app import app
-from app import engine
 
 app.secret_key = os.environ['FLASK_SECRET_KEY']
 
