@@ -41,9 +41,9 @@ def go(surl):
     long_url = get_long(surl)
     visit = Visits()
     visit.set('target', long_url)
-    try:
-        visit.set('ip_address', request.headers['x-real-ip'])
-    except KeyError:
+    if not app.debug:
+        visit.set('ip_address', request.headers.get('x-real-ip'))
+    else:
         visit.set('ip_address', request.remote_addr)
     visit.set('browser', request.user_agent.browser)
     visit.set('platform', request.user_agent.platform)
