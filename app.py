@@ -33,7 +33,7 @@ def shorten():
         surl = gen_short_url(lurl)
         return render_template('index.html', surl=request.url_root + surl)
     else:
-        flash(u'Given URL is dead.', 'error')
+        flash('Given URL is dead.', 'error')
         return render_template('index.html')
 
 @app.route('/<surl>')
