@@ -16,6 +16,8 @@ from leancloud import Object
 from leancloud import LeanCloudError
 
 
+URL_KEY_SIZE = 4
+
 app = Flask(__name__)
 
 
