@@ -62,7 +62,7 @@ def go(surl):
 
 
 def url_is_dead(url: str) -> bool:
-    """Check URL's availablity.
+    """Check URL's availability.
 
     Args:
         url: The URL string to be checked.
