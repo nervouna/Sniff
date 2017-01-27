@@ -19,6 +19,8 @@ leancloud.use_master_key(False)
 
 app.secret_key = FLASK_SECRET_KEY
 
+application = app
+
 
 if __name__ == '__main__':
     # 只在本地开发环境执行的代码
