@@ -30,12 +30,17 @@ def index():
 @app.route('/', methods=['POST'])
 def shorten():
     lurl = request.form['url']
-    if url_is_dead(lurl):
+    surl = None
+    try:
+        assert url_is_dead(lurl)
         flash('Given URL is dead.', 'error')
-        return render_template('index.html')
-    else:
-        surl = gen_short_url(lurl)
-        return render_template('index.html', surl=request.url_root + surl)
+    except (requests.exceptions.InvalidSchema, requests.exceptions.MissingSchema) as e:
+        flash('Please enter an URL with valid schema. e.g: http://, https://.', 'error')
+    except AssertionError:
+        url_key = gen_short_url(lurl)
+        surl = request.url_root + url_key
+    finally:
+        return render_template('index.html', surl=surl)
 
 
 @app.route('/<surl>')
