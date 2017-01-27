@@ -10,6 +10,7 @@ from flask import request
 from flask import redirect
 from flask import flash
 from flask import url_for
+from flask import abort
 
 from leancloud import Object
 from leancloud import LeanCloudError
@@ -42,6 +43,8 @@ def shorten():
 @app.route('/<surl>')
 def go(surl):
     long_url = get_long(surl)
+    if long_url is None:
+        abort(404)
     visit = Visits()
     visit.set('target', long_url)
     if not app.debug:
@@ -76,33 +79,35 @@ def gen_random_string(size):
 
 
 def get_short(lurl):
-    surl = Object.extend('Shortened').query.equal_to('long', lurl).first()
+    try:
+        surl = Object.extend('Shortened').query.equal_to('long', lurl).first()
+    except LeanCloudError as e:
+        if e.code == 101:
+            surl = None
+        else:
+            raise e
     return surl
 
 
 def get_long(surl):
-    lurl = Object.extend('Shortened').query.equal_to('short', surl).first()
+    try:
+        lurl = Object.extend('Shortened').query.equal_to('short', surl).first()
+    except LeanCloudError as e:
+        if e.code == 101:
+            lurl = None
+        else:
+            raise e
     return lurl
 
 
 def gen_short_url(lurl):
-    try:
-        if get_long(lurl) is not None:
-            return lurl
-    except LeanCloudError as e:
-        if e.code == 101:
-            pass
-        else:
-            raise e
-    try:
+    if get_long(lurl) is not None:
+        return lurl
+    elif get_short(lurl) is not None:
         return get_short(lurl).get('short')
-    except LeanCloudError as e:
-        if e.code == 101:
-            pass
-        else:
-            raise e
-    shortened = Shortened()
-    surl = gen_random_string(size=URL_KEY_SIZE)
-    shortened.set({"long": lurl, "short": surl})
-    shortened.save()
-    return surl
+    else:
+        shortened = Shortened()
+        surl = gen_random_string(size=URL_KEY_SIZE)
+        shortened.set({"long": lurl, "short": surl})
+        shortened.save()
+        return surl
