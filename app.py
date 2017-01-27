@@ -15,6 +15,8 @@ from leancloud import Object
 from leancloud import LeanCloudError
 
 
+URL_KEY_SIZE = 4
+
 app = Flask(__name__)
 
 
@@ -105,7 +107,7 @@ def gen_short_url(lurl):
             raise e
     shortened = Shortened()
     # Hard coded size. Fix later ( or never )
-    size = 4
+    size = URL_KEY_SIZE
     surl = gen_random_string(size=size)
     shortened.set('long', lurl)
     shortened.set('short', surl)
