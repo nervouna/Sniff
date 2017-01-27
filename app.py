@@ -56,7 +56,15 @@ def go(surl):
     return redirect(get_long(surl).get('long'))
 
 
-def url_is_dead(url):
+def url_is_dead(url: str) -> bool:
+    """Check URL's availablity.
+
+    Args:
+        url: The URL string to be checked.
+
+    Returns:
+        True for URL not available, False otherwise.
+    """
     res = requests.head(url)
     if res.status_code >= 400:
         return True
@@ -64,7 +72,15 @@ def url_is_dead(url):
         return False
 
 
-def gen_random_string(size):
+def gen_random_string(size: str) -> str:
+    """Generates a random string of given length.
+
+    Args:
+        size: The length of the desired random string.
+
+    Returns:
+        random_string: A string constructed with random ascii letters and digits.
+    """
     random_string = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(size))
     try:
         shortened_url = Shortened.query.equal_to('short', random_string).first()
@@ -76,7 +92,8 @@ def gen_random_string(size):
             raise e
 
 
-def get_short(lurl):
+def get_short(lurl: str) -> Shortened:
+    """Get the URL key for the given source URL if exists."""
     try:
         surl = Shortened.query.equal_to('long', lurl).first()
     except LeanCloudError as e:
@@ -87,7 +104,8 @@ def get_short(lurl):
     return surl
 
 
-def get_long(surl):
+def get_long(surl: str) -> Shortened:
+    """Get the source URL for the given URL key if exists."""
     try:
         lurl = Shortened.query.equal_to('short', surl).first()
     except LeanCloudError as e:
@@ -98,7 +116,15 @@ def get_long(surl):
     return lurl
 
 
-def gen_short_url(lurl):
+def gen_short_url(lurl: str) -> str:
+    """Generates the URL key for the given source URL.
+
+    Args:
+        lurl: The source URL to be shortened.
+
+    Returns:
+        surl: The shortened URL key.
+    """
     if get_long(lurl) is not None:
         return lurl
     elif get_short(lurl) is not None:
