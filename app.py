@@ -30,12 +30,12 @@ def index():
 @app.route('/', methods=['POST'])
 def shorten():
     lurl = request.form['url']
-    if check_url(lurl) is True:
-        surl = gen_short_url(lurl)
-        return render_template('index.html', surl=request.url_root + surl)
-    else:
+    if url_is_dead(lurl):
         flash('Given URL is dead.', 'error')
         return render_template('index.html')
+    else:
+        surl = gen_short_url(lurl)
+        return render_template('index.html', surl=request.url_root + surl)
 
 
 @app.route('/<surl>')
@@ -54,14 +54,11 @@ def go(surl):
     return redirect(get_long(surl).get('long'))
 
 
-def check_url(url):
-    try:
-        res = requests.head(url)
-    except:
-        return False
-    if res.status_code < 400:
+def url_is_dead(url):
+    res = requests.head(url)
+    if res.status_code >= 400:
         return True
-    else:
+    elif res.status_code < 400:
         return False
 
 
