@@ -1,5 +1,6 @@
 import string
 import random
+from json import loads
 
 import requests
 from flask import Flask
@@ -11,7 +12,9 @@ from flask import url_for
 from flask import abort
 
 from leancloud import Object
+from leancloud import GeoPoint
 from leancloud import LeanCloudError
+from geolite2 import geolite2
 
 
 app = Flask(__name__)
@@ -49,13 +52,23 @@ def go(surl):
     if long_url is None:
         abort(404)
     visit = Visits()
-    ip_address = 'localhost' if app.debug is True else request.headers.get('x-real-ip')
+    ip_address = request.headers.get('x-real-ip')
+    if ip_address is not None:
+        geo_info = get_geo_info(ip_address)
+    else:
+        geo_info = get_geo_info("125.34.208.204")
     visit.set({
         'target': long_url,
         'ip_address': ip_address,
         'browser': request.user_agent.browser,
+        'browser_version': request.user_agent.version,
         'platform': request.user_agent.platform,
-        'user_agent_string': request.user_agent.string
+        'language': request.user_agent.language,
+        'continent': geo_info['continent']['names']['en'],
+        'country': geo_info['country']['names']['en'],
+        'subdivisions': [x['names']['en'] for x in geo_info['subdivisions']],
+        'city': geo_info['city']['names']['en'],
+        'location': GeoPoint(geo_info['location']['latitude'], geo_info['location']['longitude'])
     })
     visit.save()
     return redirect(get_long(surl).get('long'))
@@ -140,3 +153,9 @@ def gen_short_url(lurl: str) -> str:
         shortened.set({"long": lurl, "short": surl})
         shortened.save()
         return surl
+
+
+def get_geo_info(ip: str) -> str:
+    reader = geolite2.reader()
+    geo_info = reader.get(ip)
+    return geo_info
