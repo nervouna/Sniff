@@ -48,14 +48,13 @@ def go(surl):
     if long_url is None:
         abort(404)
     visit = Visits()
-    visit.set('target', long_url)
-    if not app.debug:
-        visit.set('ip_address', request.headers.get('x-real-ip'))
-    else:
-        visit.set('ip_address', request.remote_addr)
-    visit.set('browser', request.user_agent.browser)
-    visit.set('platform', request.user_agent.platform)
-    visit.set('user_agent_string', request.user_agent.string)
+    visit.set({
+        'target': long_url,
+        'ip_address': [request.headers.get('x-real-ip'), 'localhost'][app.debug],
+        'browser': request.user_agent.browser,
+        'platform': request.user_agent.platform,
+        'user_agent_string': request.user_agent.string
+    })
     visit.save()
     return redirect(get_long(surl).get('long'))
 
