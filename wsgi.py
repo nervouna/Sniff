@@ -21,8 +21,6 @@ application = app
 
 if __name__ == '__main__':
     # 只在本地开发环境执行的代码
-    from werkzeug.serving import run_with_reloader
     from werkzeug.serving import run_simple
-    from werkzeug.debug import DebuggedApplication
-
-    run_simple('127.0.0.1', 3000, app, use_reloader=True)
+    app.debug = True
+    run_simple('127.0.0.1', 3000, app, use_reloader=True, use_debugger=True)
