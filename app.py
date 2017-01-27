@@ -46,9 +46,10 @@ def go(surl):
     if long_url is None:
         abort(404)
     visit = Visits()
+    ip_address = 'localhost' if app.debug = True else request.headers.get('x-real-ip')
     visit.set({
         'target': long_url,
-        'ip_address': [request.headers.get('x-real-ip'), 'localhost'][app.debug],
+        'ip_address': ip_address,
         'browser': request.user_agent.browser,
         'platform': request.user_agent.platform,
         'user_agent_string': request.user_agent.string
