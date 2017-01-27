@@ -18,7 +18,7 @@ USL runs on Python 3. It requires [flask][1], [requests][2] and [LeanCloud Pytho
 
 USL is a [LeanCloud][4] app. Before getting the code up and running, there're some chores to do.
 
-1. Create an app on [LeanCloud dashboard][5], and set a domain for the app.
+1. Create an app on [LeanCloud dashboard][5], and set a domain name for the app.
 2. Set environment variable `FLASK_SECRET_KEY` in the LeanCloud dashboard. Refer to [this][6] on how to make a good solid secret key.
 3. Install [LeanCloud CLI][7]. It's not required, but is highly recommended.
 
@@ -28,7 +28,7 @@ Clone this repo, type `lean login` then `lean checkout` to link your local repo 
 
 Use [virtualenv][8] to create a virtual environment for this app. Activate the virtual environment, then use `pip` to install the requirements.
 
-Use `lean deploy` to deploy the code onto the cloud. After that, visit the site with the domain you set before.
+Use `lean deploy` to deploy the code onto the cloud. After that, visit the site with the domain name you set before.
 
 In short:
 
@@ -45,7 +45,7 @@ $ lean deploy
 
 ### Where's the Data?
 
-You can check out the data in the [LeanCloud dashboard][5]. All the URLs are stored in the `Shortened` class, and the visitor footprints are stored in the `Visits` class.
+Check out the data in the [LeanCloud dashboard][5]. All the URLs are stored in the `Shortened` class, and the visitor footprints are stored in the `Visits` class.
 
 ### Debugging
 
