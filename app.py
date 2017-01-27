@@ -20,6 +20,7 @@ app = Flask(__name__)
 
 Visits = Object.extend('Visits')
 Shortened = Object.extend('Shortened')
+URL_KEY_SIZE = 4
 
 
 @app.route('/')
@@ -85,9 +86,6 @@ def get_long(surl):
 
 
 def gen_short_url(lurl):
-    '''Generates shortened URL from given long url, returns a string as the
-    shortened url's key.
-    '''
     try:
         if get_long(lurl) is not None:
             return lurl
@@ -104,10 +102,7 @@ def gen_short_url(lurl):
         else:
             raise e
     shortened = Shortened()
-    # Hard coded size. Fix later ( or never )
-    size = 4
-    surl = gen_random_string(size=size)
-    shortened.set('long', lurl)
-    shortened.set('short', surl)
+    surl = gen_random_string(size=URL_KEY_SIZE)
+    shortened.set({"long": lurl, "short": surl})
     shortened.save()
     return surl
