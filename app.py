@@ -26,6 +26,7 @@ Shortened = Object.extend('Shortened')
 def index():
     return render_template('index.html')
 
+
 @app.route('/', methods=['POST'])
 def shorten():
     lurl = request.form['url']
@@ -35,6 +36,7 @@ def shorten():
     else:
         flash('Given URL is dead.', 'error')
         return render_template('index.html')
+
 
 @app.route('/<surl>')
 def go(surl):
@@ -51,6 +53,7 @@ def go(surl):
     visit.save()
     return redirect(get_long(surl).get('long'))
 
+
 def check_url(url):
     try:
         res = requests.head(url)
@@ -60,6 +63,7 @@ def check_url(url):
         return True
     else:
         return False
+
 
 def gen_random_string(size):
     random_string = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(size))
@@ -72,20 +76,24 @@ def gen_random_string(size):
         else:
             raise e
 
+
 def get_short(lurl):
     surl = Object.extend('Shortened').query.equal_to('long', lurl).first()
     return surl
 
+
 def get_long(surl):
     lurl = Object.extend('Shortened').query.equal_to('short', surl).first()
     return lurl
+
 
 def gen_short_url(lurl):
     '''Generates shortened URL from given long url, returns a string as the
     shortened url's key.
     '''
     try:
-        if get_long(lurl) is not None: return lurl
+        if get_long(lurl) is not None:
+            return lurl
     except LeanCloudError as e:
         if e.code == 101:
             pass
