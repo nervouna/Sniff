@@ -71,7 +71,7 @@ def url_is_dead(url):
 def gen_random_string(size):
     random_string = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(size))
     try:
-        shortened_url = Object.extend('Shortened').query.equal_to('short', random_string).first()
+        shortened_url = Shortened.query.equal_to('short', random_string).first()
         return gen_random_string(size + 1)
     except LeanCloudError as e:
         if e.code == 101:
@@ -82,7 +82,7 @@ def gen_random_string(size):
 
 def get_short(lurl):
     try:
-        surl = Object.extend('Shortened').query.equal_to('long', lurl).first()
+        surl = Shortened.query.equal_to('long', lurl).first()
     except LeanCloudError as e:
         if e.code == 101:
             surl = None
@@ -93,7 +93,7 @@ def get_short(lurl):
 
 def get_long(surl):
     try:
-        lurl = Object.extend('Shortened').query.equal_to('short', surl).first()
+        lurl = Shortened.query.equal_to('short', surl).first()
     except LeanCloudError as e:
         if e.code == 101:
             lurl = None
