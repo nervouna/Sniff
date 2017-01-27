@@ -53,10 +53,7 @@ def go(surl):
         abort(404)
     visit = Visits()
     ip_address = request.headers.get('x-real-ip')
-    if ip_address is not None:
-        geo_info = get_geo_info(ip_address)
-    else:
-        geo_info = get_geo_info("125.34.208.204")
+    geo_info = None if ip_address is None else get_geo_info(ip_address)
     visit.set({
         'target': long_url,
         'ip_address': ip_address,
