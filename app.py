@@ -33,9 +33,9 @@ def shorten():
     surl = None
     try:
         assert url_is_dead(lurl)
-        flash('Given URL is dead.', 'error')
+        flash('Given URL is dead.', 'danger')
     except (requests.exceptions.InvalidSchema, requests.exceptions.MissingSchema) as e:
-        flash('Please enter an URL with valid schema. e.g: http://, https://.', 'error')
+        flash('Please enter an URL with valid schema. e.g: http://, https://.', 'danger')
     except AssertionError:
         url_key = gen_short_url(lurl)
         surl = request.url_root + url_key

@@ -3,24 +3,46 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>URL-Shortener</title>
   </head>
   <body>
-    <h3>Submit Your URL Here.</h3>
-    <div class="messages">
-      {% with messages = get_flashed_messages() %}
-      {% for message in messages %}
-      <p><small>{{ message.category }} </small> {{ message }}</p>
-      {% endfor %}
-      {% endwith %}
-    </div>
-    <form class="" action="/" method="post">
-      <input type="url" name="url" value="">
-      <input type="submit" name="" value="Submit">
-    </form>
-    <div class="result">
-      {% if surl %}<h3>Result:</h3><p><pre>{{ surl }}</pre></p>{% endif %}
+    <div class="container">
+
+      <header>
+        <h1 class="page-header">USL <small>- URL Shortener on LeanCloud</small></h1>
+        <p class="lead">USL is a URL shortener. It (of course) shortens any given URL, also tracks who and when opened your short link on what device.</p>
+      </header>
+
+      <section>
+
+        <h2>Enter Source URL Here.</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <p>{{ message }}</p>
+        </div>
+        {% endfor %}
+        {% endwith %}
+
+        <form class="" action="{{ url_for('shorten') }}" method="post">
+          <div class="form-group">
+            <input type="url" name="url" value="" class="form-control input-lg">
+          </div>
+          <input type="submit" name="" value="Submit" class="btn btn-default">
+        </form>
+
+        {% if surl %}
+        <div class="result">
+          <h2>Shortened URL</h2>
+          <p><a href={{ surl }}>{{ surl }}</a></p>
+        </div>
+        {% endif %}
+
+      </section>
+
     </div>
   </body>
 </html>
