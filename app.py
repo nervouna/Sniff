@@ -1,9 +1,9 @@
 # coding: utf-8
 
-import requests
 import string
 import random
 
+import requests
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -15,8 +15,6 @@ from flask import abort
 from leancloud import Object
 from leancloud import LeanCloudError
 
-
-URL_KEY_SIZE = 4
 
 app = Flask(__name__)
 
