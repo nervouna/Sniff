@@ -56,7 +56,7 @@ You can always use `lean up` to fire up a debuggable instance on your machine, a
 ### Todos
 
 * [ ] QRCode for short links
-* [ ] Exportable visit data
+* [ ] Export data in CSV
 * [ ] Browser plugins
 
 ### Maybes
