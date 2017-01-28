@@ -151,6 +151,14 @@ def gen_short_url(lurl: str) -> str:
 
 
 def get_geo_info(ip: str) -> dict:
+    """Generates a dictionary contains user's geo info.
+
+    Args:
+        ip: IP address.
+
+    Returns:
+        geo_info: User's geo location.
+    """
     reader = geolite2.reader()
     raw_info = reader.get(ip)
     geo_info = {}
