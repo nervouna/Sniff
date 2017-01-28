@@ -10,13 +10,13 @@ CTL is a marketing campaign tracker. It checks the availability of the given URL
 
 ## Requirements
 
-USL runs on Python 3. It requires [flask][1], [requests][2] and [LeanCloud Python SDK][3].
+CTL runs on Python 3. It requires [flask][1], [requests][2] and [LeanCloud Python SDK][3].
 
 ## Quick Start
 
 ### Before You Begin
 
-USL is a [LeanCloud][4] app. Before getting the code up and running, there're some chores to do.
+CTL is a [LeanCloud][4] app. Before getting the code up and running, there're some chores to do.
 
 1. Create an app on [LeanCloud dashboard][5], and set a domain name for the app.
 2. Set environment variable `FLASK_SECRET_KEY` in the LeanCloud dashboard. Refer to [this][6] on how to make a good solid secret key.
