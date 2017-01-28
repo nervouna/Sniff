@@ -33,7 +33,7 @@ Use `lean deploy` to deploy the code onto the cloud. After that, visit the site 
 In short:
 
 ```bash
-$ git clone https://github.com/nervouna/URL-Shortener.git
+$ git clone https://github.com/nervouna/Sniff.git
 $ cd URL-Shortener
 $ virtualenv venv --python=python3
 $ source venv/bin/activate
@@ -79,5 +79,5 @@ Author: GUAN Xiaoyu ([guanxy@me.com][10])
 [6]: https://gist.github.com/nervouna/cd58fb09c22826eaaff996793de72d85
 [7]: https://github.com/leancloud/lean-cli/releases/latest
 [8]: https://github.com/pypa/virtualenv
-[9]: https://github.com/nervouna/URL-Shortener/blob/master/LICENSE
+[9]: https://github.com/nervouna/Sniff/blob/master/LICENSE
 [10]: mailto:guanxy@me.com
