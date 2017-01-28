@@ -1,6 +1,6 @@
-# URL Shortener on LeanCloud
+# Campaign Tracker on LeanCloud
 
-URL Shortener on LeanCloud (USL) is a URL Shortener. It checks the availability of the given URL, shortens it, and tracks who / when / where / how the link is clicked.
+CTL is a marketing campaign tracker. It checks the availability of the given URL, shortens it, and tracks who / when / where / how the link is clicked.
 
 ## Features
 
