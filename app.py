@@ -52,17 +52,19 @@ def go(surl):
     if long_url is None:
         abort(404)
     visit = Visits()
+    visit.set('target', long_url)
     ip_address = request.headers.get('x-real-ip')
-    geo_info = None if ip_address is None else get_geo_info(ip_address)
-    visit.set({
-        'target': long_url,
-        'ip_address': ip_address,
+    if ip_address:
+        geo_info = get_geo_info(ip_address)
+        visit.set(geo_info)
+    visit.set('ip_address', 'localhost' if ip_address is None else ip_address)
+    browser_info = {
         'browser': 'weixin' if 'MicroMessenger' in request.user_agent.string else request.user_agent.browser,
         'browser_version': request.user_agent.version,
         'platform': request.user_agent.platform,
         'language': request.user_agent.language
-    })
-    visit.set(geo_info)
+    }
+    visit.set(browser_info)
     visit.save()
     return redirect(get_long(surl).get('long'))
 
