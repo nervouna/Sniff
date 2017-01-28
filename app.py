@@ -57,7 +57,7 @@ def go(surl):
     if ip_address:
         geo_info = get_geo_info(ip_address)
         visit.set(geo_info)
-    visit.set('ip_address', 'localhost' if ip_address is None else ip_address)
+    visit.set('ip_address', ip_address)
     browser_info = {
         'browser': 'weixin' if 'MicroMessenger' in request.user_agent.string else request.user_agent.browser,
         'browser_version': request.user_agent.version,
