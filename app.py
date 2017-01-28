@@ -57,7 +57,7 @@ def go(surl):
     visit.set({
         'target': long_url,
         'ip_address': ip_address,
-        'browser': request.user_agent.browser,
+        'browser': 'weixin' if 'MicroMessenger' in request.user_agent.string else request.user_agent.browser,
         'browser_version': request.user_agent.version,
         'platform': request.user_agent.platform,
         'language': request.user_agent.language,
