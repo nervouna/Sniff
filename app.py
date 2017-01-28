@@ -65,15 +65,14 @@ def go(surl):
         'language': request.user_agent.language
     }
     visit.set(browser_info)
-    if request.args.get('utm_source'):
-        campaign_info = {
-            'campaign': request.args.get('utm_campaign'),
-            'campaign_source': request.args.get('utm_source'),
-            'campaign_medium': request.args.get('utm_medium'),
-            'campaign_term': request.args.get('utm_term'),
-            'campaign_content': request.args.get('utm_content')
-        }
-        visit.set(campaign_info)
+    campaign_info = {
+        'campaign': request.args.get('utm_campaign'),
+        'campaign_source': request.args.get('utm_source'),
+        'campaign_medium': request.args.get('utm_medium'),
+        'campaign_term': request.args.get('utm_term'),
+        'campaign_content': request.args.get('utm_content')
+    }
+    visit.set(campaign_info)
     visit.save()
     return redirect(get_long(surl).get('long'))
 
