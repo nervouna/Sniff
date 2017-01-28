@@ -1,22 +1,22 @@
-# Campaign Tracker on LeanCloud
+# Sniff 🐕
 
-CTL is a marketing campaign tracker. It checks the availability of the given URL, shortens it, and tracks who / when / where / how the link is clicked.
+Sniff is a marketing campaign tracker. It shortens any given URL, and tracks who / when / where / how the link is clicked.
 
 ## Features
 
-* Checks if the URL is alive
 * Shortens the URL
-* Logs who / when / where / how the link is clicked
+* Logs browser info
+* Logs geographic info
 
 ## Requirements
 
-CTL runs on Python 3. It requires [flask][1], [requests][2] and [LeanCloud Python SDK][3].
+Sniff runs on Python 3. It requires [flask][1], [requests][2] and [LeanCloud Python SDK][3].
 
 ## Quick Start
 
 ### Before You Begin
 
-CTL is a [LeanCloud][4] app. Before getting the code up and running, there're some chores to do.
+Sniff is a [LeanCloud][4] app. Before getting the code up and running, there're some chores to do.
 
 1. Create an app on [LeanCloud dashboard][5], and set a domain name for the app.
 2. Set environment variable `FLASK_SECRET_KEY` in the LeanCloud dashboard. Refer to [this][6] on how to make a good solid secret key.
