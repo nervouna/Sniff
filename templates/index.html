@@ -5,19 +5,26 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>URL-Shortener</title>
+    <title>URL Shortener on LeanCloud</title>
   </head>
   <body>
     <div class="container">
 
       <header>
-        <h1 class="page-header">USL <small>- URL Shortener on LeanCloud</small></h1>
-        <p class="lead">USL is a URL shortener. It (of course) shortens any given URL, also tracks who and when opened your short link on what device.</p>
+        <h1 class="page-header">😮 It Shrinks.</h1>
+        <p class="lead">USL is a URL shortener. It shortens any given URL, also tracks who and when opened your short link on what device.</p>
       </header>
 
       <section>
 
-        <h2>Enter Source URL Here.</h2>
+        <form class="" action="{{ url_for('shorten') }}" method="post">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="url" name="url" value="" placeholder="https://www.example.com" class="form-control input-lg">
+              <span class="input-group-btn"><input type="submit" name="" value="➜" class="btn btn-primary btn-lg"></span>
+            </div>
+          </div>
+        </form>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
@@ -26,13 +33,6 @@
         </div>
         {% endfor %}
         {% endwith %}
-
-        <form class="" action="{{ url_for('shorten') }}" method="post">
-          <div class="form-group">
-            <input type="url" name="url" value="" class="form-control input-lg">
-          </div>
-          <input type="submit" name="" value="Submit" class="btn btn-default">
-        </form>
 
         {% if surl %}
         <div class="result">
