@@ -60,13 +60,9 @@ def go(surl):
         'browser': 'weixin' if 'MicroMessenger' in request.user_agent.string else request.user_agent.browser,
         'browser_version': request.user_agent.version,
         'platform': request.user_agent.platform,
-        'language': request.user_agent.language,
-        'continent': geo_info['continent']['names']['en'],
-        'country': geo_info['country']['names']['en'],
-        'subdivisions': [x['names']['en'] for x in geo_info['subdivisions']],
-        'city': geo_info['city']['names']['en'],
-        'location': GeoPoint(geo_info['location']['latitude'], geo_info['location']['longitude'])
+        'language': request.user_agent.language
     })
+    visit.set(geo_info)
     visit.save()
     return redirect(get_long(surl).get('long'))
 
@@ -152,7 +148,13 @@ def gen_short_url(lurl: str) -> str:
         return surl
 
 
-def get_geo_info(ip: str) -> str:
+def get_geo_info(ip: str) -> dict:
     reader = geolite2.reader()
-    geo_info = reader.get(ip)
+    raw_info = reader.get(ip)
+    geo_info = {}
+    geo_info['continent'] = raw_info['continent']['names']['en']
+    geo_info['country'] = raw_info['country']['names']['en']
+    geo_info['subdivisions'] = [x['names']['en'] for x in raw_info['subdivisions']],
+    geo_info['city'] = raw_info['city']['names']['en']
+    geo_info['location'] = GeoPoint(raw_info['location']['latitude'], raw_info['location']['longitude'])
     return geo_info
