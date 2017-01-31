@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Marketing Campaign Tracker on LeanCloud</title>
+  </head>
+  <body>
+    <div class="container">
+
+      <header>
+        <h1 class="page-header">🤐 Big Brother is Watching <del>You</del> Them.</h1>
+      </header>
+
+      <section>
+
+        <form class="" action="{{ url_for('login') }}" method="post">
+          <div class="form-group">
+            <input type="text" name="username" value="" placeholder="username" class="form-control input-lg">
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <input type="password" name="password" value="" placeholder="password" class="form-control input-lg">
+              <span class="input-group-btn"><input type="submit" name="" value="➜" class="btn btn-primary btn-lg"></span>
+            </div>
+          </div>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <p>{{ message }}</p>
+        </div>
+        {% endfor %}
+        {% endwith %}
+
+        {% if surl %}
+        <div class="result">
+          <h2>Shortened URL</h2>
+          <p><a href={{ surl }}>{{ surl }}</a></p>
+        </div>
+        {% endif %}
+
+      </section>
+
+    </div>
+  </body>
+</html>

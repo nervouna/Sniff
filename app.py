@@ -39,12 +39,20 @@ def login_required(func):
 
 @app.route('/login')
 def login_form():
-    return render_template('index.html')
+    return render_template('login.html')
 
 
 @app.route('/login', methods=['POST'])
 def login():
-    pass
+    username, password = request.form['username'], request.form['password']
+    sniffer = Sniffer()
+    try:
+        sniffer.login(username, password)
+        flash('logged in', 'success')
+        return redirect(url_for('index'))
+    except LeanCloudError as e:
+        flash(e.error, 'danger')
+        return redirect(url_for('login_form'))
 
 
 @app.route('/')
