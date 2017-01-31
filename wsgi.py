@@ -26,5 +26,5 @@ application = app
 if __name__ == '__main__':
     # 只在本地开发环境执行的代码
     from werkzeug.serving import run_simple
-    app.debug = True
-    run_simple('0.0.0.0', 3000, app, use_reloader=True, use_debugger=True)
+    application.debug = True
+    run_simple('0.0.0.0', 3000, application, use_reloader=True, use_debugger=True)
