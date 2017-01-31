@@ -1,6 +1,6 @@
 import string
 import random
-from json import loads
+from functools import wraps
 
 import requests
 from flask import Flask
@@ -11,6 +11,7 @@ from flask import flash
 from flask import url_for
 from flask import abort
 
+from leancloud import User
 from leancloud import Object
 from leancloud import GeoPoint
 from leancloud import LeanCloudError
@@ -25,12 +26,35 @@ Shortened = Object.extend('Shortened')
 URL_KEY_SIZE = 4
 
 
+class Sniffer(User):
+    pass
+
+
+def login_required(func):
+    @wraps(func)
+    def secret_view(*args, **kwargs):
+        return func(*args, **kwargs)
+    return secret_view
+
+
+@app.route('/login')
+def login_form():
+    return render_template('index.html')
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    pass
+
+
 @app.route('/')
+@login_required
 def index():
     return render_template('index.html')
 
 
 @app.route('/', methods=['POST'])
+@login_required
 def shorten():
     lurl = request.form['url']
     surl = None
