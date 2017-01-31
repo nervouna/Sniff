@@ -53,7 +53,7 @@ def login():
     try:
         sniffer.login(username, password)
         flash('logged in', 'success')
-        return redirect(url_for('index'))
+        return redirect(url_for('url_shortener_form'))
     except LeanCloudError as e:
         flash(e.error, 'danger')
         return redirect(url_for('login_form'))
@@ -65,6 +65,7 @@ def logout():
     current_user = SniffUser.get_current()
     current_user.logout()
     flash('logged out', 'info')
+    return redirect(url_for('login'))
 
 
 @app.errorhandler(401)
@@ -73,14 +74,19 @@ def unauthorized(e):
 
 
 @app.route('/')
-@login_required
 def index():
     return render_template('index.html')
 
 
-@app.route('/', methods=['POST'])
+@app.route('/url_shortener')
 @login_required
-def shorten():
+def url_shortener_form():
+    return render_template('shortener.html')
+
+
+@app.route('/url_shortener', methods=['POST'])
+@login_required
+def url_shortener():
     lurl = request.form['url']
     surl = None
     try:
@@ -92,7 +98,7 @@ def shorten():
         url_key = gen_short_url(lurl)
         surl = request.url_root + url_key
     finally:
-        return render_template('index.html', surl=surl)
+        return render_template('shortener.html', surl=surl)
 
 
 @app.route('/<surl>')
