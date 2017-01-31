@@ -59,6 +59,14 @@ def login():
         return redirect(url_for('login_form'))
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    current_user = Sniffer.get_current()
+    current_user.logout()
+    flash('logged out', 'info')
+
+
 @app.errorhandler(401)
 def unauthorized(e):
     return e
