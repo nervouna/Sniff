@@ -26,14 +26,14 @@ Shortened = Object.extend('Shortened')
 URL_KEY_SIZE = 4
 
 
-class Sniffer(User):
+class SniffUser(User):
     pass
 
 
 def login_required(func):
     @wraps(func)
     def secret_view(*args, **kwargs):
-        current_user = Sniffer.get_current()
+        current_user = SniffUser.get_current()
         if not current_user:
             abort(401)
         else:
@@ -49,7 +49,7 @@ def login_form():
 @app.route('/login', methods=['POST'])
 def login():
     username, password = request.form['username'], request.form['password']
-    sniffer = Sniffer()
+    sniffer = SniffUser()
     try:
         sniffer.login(username, password)
         flash('logged in', 'success')
@@ -62,7 +62,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    current_user = Sniffer.get_current()
+    current_user = SniffUser.get_current()
     current_user.logout()
     flash('logged out', 'info')
 
