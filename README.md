@@ -47,6 +47,8 @@ $ lean deploy
 
 Check out the data in the [LeanCloud dashboard][5]. All the URLs are stored in the `Shortened` class, and the visitor footprints are stored in the `Visits` class.
 
+Note: For now you'll have to add users in LeanCloud dashboard.
+
 ### Debugging
 
 You can always use `lean up` to fire up a debuggable instance on your machine, and visit it via `http://127.0.0.1:3000` by default.
