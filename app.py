@@ -94,8 +94,11 @@ def url_shortener_form():
 @app.route('/url_shortener', methods=['POST'])
 @login_required
 def url_shortener():
-    lurl = request.form['url']
     shortened = None
+    lurl = request.form['url']
+    if request.url_root in lurl:
+        flash('Big brother is not to be watched.', 'info')
+        return redirect(url_for('url_shortener_form'))
     try:
         assert url_is_dead(lurl)
         flash('Given URL is dead.', 'danger')
@@ -103,17 +106,16 @@ def url_shortener():
         flash('Please enter an URL with valid schema. e.g: http://, https://.', 'danger')
     except AssertionError:
         shortened = gen_short_url(lurl)
-        print(shortened)
         return render_template('shortener.html', shortened=shortened)
 
 
 @app.route('/<surl>')
 def go(surl):
-    long_url = get_long(surl)
-    if long_url is None:
+    target = get_long(surl)
+    if target is None:
         abort(404)
     visit = Visits()
-    visit.set('target', long_url)
+    visit.set('target', target)
     ip_address = request.headers.get('x-real-ip')
     if ip_address:
         geo_info = get_geo_info(ip_address)
@@ -154,7 +156,7 @@ def url_is_dead(url: str) -> bool:
         return False
 
 
-def gen_random_string(size: str) -> str:
+def gen_random_string(size: int) -> str:
     """Generates a random string of given length.
 
     Args:
@@ -176,6 +178,7 @@ def gen_random_string(size: str) -> str:
 
 def get_long(surl: str) -> Shortened:
     """Get the source URL for the given URL key if exists."""
+    shortened = None
     try:
         shortened = Shortened.query.equal_to('short', surl).first()
     except LeanCloudError as e:
