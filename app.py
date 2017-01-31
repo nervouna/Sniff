@@ -95,17 +95,16 @@ def url_shortener_form():
 @login_required
 def url_shortener():
     lurl = request.form['url']
-    surl = None
+    shortened = None
     try:
         assert url_is_dead(lurl)
         flash('Given URL is dead.', 'danger')
     except (requests.exceptions.InvalidSchema, requests.exceptions.MissingSchema) as e:
         flash('Please enter an URL with valid schema. e.g: http://, https://.', 'danger')
     except AssertionError:
-        url_key = gen_short_url(lurl)
-        surl = request.url_root + url_key
-    finally:
-        return render_template('shortener.html', surl=surl)
+        shortened = gen_short_url(lurl)
+        print(shortened)
+        return render_template('shortener.html', shortened=shortened)
 
 
 @app.route('/<surl>')
@@ -166,7 +165,7 @@ def gen_random_string(size: str) -> str:
     """
     random_string = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(size))
     try:
-        shortened_url = Shortened.query.equal_to('short', random_string).first()
+        shortened = Shortened.query.equal_to('short', random_string).first()
         return gen_random_string(size + 1)
     except LeanCloudError as e:
         if e.code == 101:
@@ -175,31 +174,19 @@ def gen_random_string(size: str) -> str:
             raise e
 
 
-def get_short(lurl: str) -> Shortened:
-    """Get the URL key for the given source URL if exists."""
-    try:
-        surl = Shortened.query.equal_to('long', lurl).first()
-    except LeanCloudError as e:
-        if e.code == 101:
-            surl = None
-        else:
-            raise e
-    return surl
-
-
 def get_long(surl: str) -> Shortened:
     """Get the source URL for the given URL key if exists."""
     try:
-        lurl = Shortened.query.equal_to('short', surl).first()
+        shortened = Shortened.query.equal_to('short', surl).first()
     except LeanCloudError as e:
         if e.code == 101:
             lurl = None
         else:
             raise e
-    return lurl
+    return shortened
 
 
-def gen_short_url(lurl: str) -> str:
+def gen_short_url(lurl: str) -> Shortened:
     """Generates the URL key for the given source URL.
 
     Args:
@@ -208,16 +195,19 @@ def gen_short_url(lurl: str) -> str:
     Returns:
         surl: The shortened URL key.
     """
-    if get_long(lurl) is not None:
-        return lurl
-    elif get_short(lurl) is not None:
-        return get_short(lurl).get('short')
-    else:
-        shortened = Shortened()
-        surl = gen_random_string(size=URL_KEY_SIZE)
-        shortened.set({"long": lurl, "short": surl})
+    shortened = Shortened()
+    surl = gen_random_string(size=URL_KEY_SIZE)
+    shortened.set({"long": lurl, "short": surl})
+    try:
         shortened.save()
-        return surl
+        return shortened
+    except LeanCloudError as e:
+        # A unique field was given a value that is already taken
+        if e.code == 137:
+            existing = Shortened.query.equal_to('long', lurl).first()
+            return existing
+        else:
+            abort(400)
 
 
 def get_geo_info(ip: str) -> dict:

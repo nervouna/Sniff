@@ -34,10 +34,10 @@
         {% endfor %}
         {% endwith %}
 
-        {% if surl %}
+        {% if shortened %}
         <div class="result">
           <h2>Shortened URL</h2>
-          <p><a href={{ surl }}>{{ surl }}</a></p>
+          <p><a href={{ shortened.get('short') }}>{{ shortened.get('short') }}</a></p>
         </div>
         {% endif %}
 
