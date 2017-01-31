@@ -33,7 +33,11 @@ class Sniffer(User):
 def login_required(func):
     @wraps(func)
     def secret_view(*args, **kwargs):
-        return func(*args, **kwargs)
+        current_user = Sniffer.get_current()
+        if not current_user:
+            abort(401)
+        else:
+            return func(*args, **kwargs)
     return secret_view
 
 
@@ -53,6 +57,11 @@ def login():
     except LeanCloudError as e:
         flash(e.error, 'danger')
         return redirect(url_for('login_form'))
+
+
+@app.errorhandler(401)
+def unauthorized(e):
+    return e
 
 
 @app.route('/')
