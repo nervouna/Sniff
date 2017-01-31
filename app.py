@@ -106,7 +106,7 @@ def url_shortener():
         flash('Please enter an URL with valid schema. e.g: http://, https://.', 'danger')
     except AssertionError:
         shortened = gen_short_url(lurl)
-        return render_template('shortener.html', shortened=shortened)
+        return render_template('shortener.html', shortened=shortened, host=request.url_root)
 
 
 @app.route('/<surl>')

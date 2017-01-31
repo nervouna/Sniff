@@ -37,7 +37,7 @@
         {% if shortened %}
         <div class="result">
           <h2>Shortened URL</h2>
-          <p><a href={{ shortened.get('short') }}>{{ shortened.get('short') }}</a></p>
+          <p class="lead"><a href="{{ url_for('go', surl=shortened.get('short')) }}">{{ host + shortened.get('short') }}</a></p>
         </div>
         {% endif %}
 
