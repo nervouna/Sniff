@@ -69,7 +69,7 @@ def logout():
 
 @app.errorhandler(401)
 def unauthorized(e):
-    return e
+    return render_template('401.html'), 401
 
 
 @app.route('/')
