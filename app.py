@@ -1,7 +1,9 @@
 import string
 import random
 from functools import wraps
+from io import BytesIO
 
+import pyqrcode
 import requests
 from flask import Flask
 from flask import render_template
@@ -14,6 +16,7 @@ from flask import abort
 from leancloud import User
 from leancloud import Object
 from leancloud import GeoPoint
+from leancloud import File
 from leancloud import LeanCloudError
 from geolite2 import geolite2
 
@@ -24,6 +27,10 @@ app = Flask(__name__)
 Visits = Object.extend('Visits')
 Shortened = Object.extend('Shortened')
 URL_KEY_SIZE = 4
+
+
+class QRCode(File):
+    pass
 
 
 class SniffUser(User):
