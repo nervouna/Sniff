@@ -95,6 +95,7 @@ def url_shortener_form():
 @login_required
 def url_shortener():
     shortened = None
+    host = request.url_root
     lurl = request.form['url']
     if request.url_root in lurl:
         flash('Big brother is not to be watched.', 'info')
@@ -104,9 +105,15 @@ def url_shortener():
             flash('Given URL is dead.', 'danger')
         else:
             shortened = gen_short_url(lurl)
+            url = host + shortened.get('short')
+            buff = BytesIO()
+            pyqrcode.create(url).svg(buff, scale=8)
+            qrcode = QRCode('qrcode.svg', buff)
+            shortened.set('qrcode', qrcode)
+            shortened.save()
     except (requests.exceptions.InvalidSchema, requests.exceptions.MissingSchema) as e:
         flash('Please enter an URL with valid schema. e.g: http://, https://.', 'danger')
-    return render_template('shortener.html', shortened=shortened, host=request.url_root)
+    return render_template('shortener.html', shortened=shortened, host=host)
 
 
 @app.route('/<surl>')
