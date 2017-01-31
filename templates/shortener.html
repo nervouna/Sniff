@@ -38,6 +38,7 @@
         <div class="result">
           <h2>Shortened URL</h2>
           <p class="lead"><a href="{{ url_for('go', surl=shortened.get('short')) }}">{{ host + shortened.get('short') }}</a></p>
+          <p><img class="img-thumbnail" src="{{ shortened.get('qrcode').url }}" alt=""></p>
         </div>
         {% endif %}
 
