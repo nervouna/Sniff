@@ -100,13 +100,13 @@ def url_shortener():
         flash('Big brother is not to be watched.', 'info')
         return redirect(url_for('url_shortener_form'))
     try:
-        assert url_is_dead(lurl)
-        flash('Given URL is dead.', 'danger')
+        if url_is_dead(lurl):
+            flash('Given URL is dead.', 'danger')
+        else:
+            shortened = gen_short_url(lurl)
     except (requests.exceptions.InvalidSchema, requests.exceptions.MissingSchema) as e:
         flash('Please enter an URL with valid schema. e.g: http://, https://.', 'danger')
-    except AssertionError:
-        shortened = gen_short_url(lurl)
-        return render_template('shortener.html', shortened=shortened, host=request.url_root)
+    return render_template('shortener.html', shortened=shortened, host=request.url_root)
 
 
 @app.route('/<surl>')
