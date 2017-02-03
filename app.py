@@ -166,7 +166,7 @@ def url_is_dead(url: str) -> bool:
     Returns:
         True for URL not available, False otherwise.
     """
-    res = requests.head(url)
+    res = requests.get(url)
     if res.status_code >= 400:
         return True
     elif res.status_code < 400:
