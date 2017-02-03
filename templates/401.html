@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>Marketing Campaign Tracker on LeanCloud</title>
-  </head>
-  <body>
+{% extends "layout.html" %}
+{% block title %}401 Unauthorized{% endblock %}
+{% block content %}
     <div class="container">
 
       <header>
@@ -16,5 +9,4 @@
       </header>
 
     </div>
-  </body>
-</html>
+{% endblock %}
