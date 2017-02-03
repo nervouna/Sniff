@@ -147,6 +147,19 @@ def go(surl):
     return redirect(get_long(surl).get('long'))
 
 
+@app.route('/url_list')
+@login_required
+def url_list():
+    current_page = 1
+    if request.args.get('page') is not None:
+        current_page = request.args.get('page')
+    url_list = [
+        {'short': 'abcd', 'long': 'http://www.leancloud.cn'},
+        {'short': 'efgh', 'long': 'https://console.leancloud.cn'}
+    ]
+    return render_template('url_list.html', url_list=url_list, current_page=current_page)
+
+
 def url_is_dead(url: str) -> bool:
     """Check URL's availability.
 
