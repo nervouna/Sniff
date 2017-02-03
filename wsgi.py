@@ -26,5 +26,13 @@ application = app
 if __name__ == '__main__':
     # 只在本地开发环境执行的代码
     from werkzeug.serving import run_simple
+    extra_dirs = ['templates', ]
+    extra_files = extra_dirs[:]
+    for extra_dir in extra_dirs:
+        for dirname, dirs, files in os.walk(extra_dir):
+            for filename in files:
+                filename = os.path.join(dirname, filename)
+                if os.path.isfile(filename):
+                    extra_files.append(filename)
     application.debug = True
-    run_simple('0.0.0.0', 3000, application, use_reloader=True, use_debugger=True)
+    run_simple('0.0.0.0', 3000, application, use_reloader=True, use_debugger=True, extra_files=extra_files)
