@@ -1,0 +1,8 @@
+{% set nav_bar = [('url_shortener_form', 'New Link'), ('url_list', 'Links')] -%}
+{% set active_page = active_page|default('url_shortener_form') -%}
+<ul class="nav nav-pills nav-stacked">
+{% for id, caption in nav_bar %}
+  <li {% if active_page == id %} class="active"{% endif %}><a href="{{ url_for(id) }}">{{ caption }}</a></li>
+{% endfor %}
+  <li><a href="{{ url_for('logout') }}">Log out</a></li>
+</ul>

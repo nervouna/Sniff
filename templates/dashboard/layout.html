@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>{% block title %}{% endblock %} — Sniff</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="page-header">Sniff <small>Dashboard</small></h1>
+      <div class="row">
+        <div class="col-md-2">
+          {% include 'dashboard/nav.html' %}
+        </div>
+        <div class="col-md-10">
+
+          {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <p>{{ message }}</p>
+          </div>
+          {% endfor %}
+          {% endwith %}
+
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

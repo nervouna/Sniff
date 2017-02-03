@@ -1,13 +1,7 @@
-{% extends "layout.html" %}
+{% extends "dashboard/layout.html" %}
+{% set active_page = 'url_shortener_form' -%}
 {% block title %}URL Shortener{% endblock %}
 {% block content %}
-    <div class="container">
-
-      <header>
-        <h1 class="page-header">🤐 Big Brother is Watching <del>You</del> Them.</h1>
-        <p class="lead">Sniff is a marketing campaign tracker. It checks the availability of the given URL, shortens it, and tracks who / when / where / how the link is clicked.</p>
-      </header>
-
       <section>
 
         <form class="" action="{{ url_for('url_shortener') }}" method="post">
@@ -19,14 +13,6 @@
           </div>
         </form>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">
-          <p>{{ message }}</p>
-        </div>
-        {% endfor %}
-        {% endwith %}
-
         {% if shortened %}
         <div class="result">
           <h2>Shortened URL</h2>
@@ -36,6 +22,4 @@
         {% endif %}
 
       </section>
-
-    </div>
 {% endblock %}

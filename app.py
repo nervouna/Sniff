@@ -88,7 +88,7 @@ def index():
 @app.route('/url_shortener')
 @login_required
 def url_shortener_form():
-    return render_template('shortener.html')
+    return render_template('dashboard/shortener.html')
 
 
 @app.route('/url_shortener', methods=['POST'])
@@ -113,7 +113,7 @@ def url_shortener():
             shortened.save()
     except (requests.exceptions.InvalidSchema, requests.exceptions.MissingSchema) as e:
         flash('Please enter an URL with valid schema. e.g: http://, https://.', 'danger')
-    return render_template('shortener.html', shortened=shortened, host=host)
+    return render_template('dashboard/shortener.html', shortened=shortened, host=host)
 
 
 @app.route('/<surl>')
@@ -154,7 +154,7 @@ def url_list():
     if request.args.get('page') is not None:
         current_page = request.args.get('page')
     url_list = Shortened.query.add_descending('createdAT').include('qrcode').limit(20).find()
-    return render_template('url_list.html', url_list=url_list, current_page=current_page)
+    return render_template('dashboard/url_list.html', url_list=url_list, current_page=current_page)
 
 
 def url_is_dead(url: str) -> bool:
