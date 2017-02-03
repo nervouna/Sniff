@@ -153,10 +153,7 @@ def url_list():
     current_page = 1
     if request.args.get('page') is not None:
         current_page = request.args.get('page')
-    url_list = [
-        {'short': 'abcd', 'long': 'http://www.leancloud.cn'},
-        {'short': 'efgh', 'long': 'https://console.leancloud.cn'}
-    ]
+    url_list = Shortened.query.add_descending('createdAT').include('qrcode').limit(20).find()
     return render_template('url_list.html', url_list=url_list, current_page=current_page)
 
 

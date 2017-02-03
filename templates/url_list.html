@@ -1,5 +1,29 @@
 {% extends "layout.html" %}
 {% block title %}URL List{% endblock %}
 {% block content %}
-Now imagine a list.
+<div class="container">
+  <header>
+    <h1 class="page-header">URL List</h1>
+  </header>
+  <section>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Short Link</th>
+          <th>Original Link</th>
+          <th>QRCode</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for url in url_list %}
+          <tr>
+            <td><code>https://sniff.leanapp.cn/{{ url.get('short') }}</code></td>
+            <td><a href="{{ url.get('long') }}" target="_blank">Open</a></td>
+            <td><a href="{{ url.get('qrcode').url }}">SVG</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
 {% endblock %}
