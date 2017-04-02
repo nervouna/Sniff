@@ -24,8 +24,8 @@ from geolite2 import geolite2
 app = Flask(__name__)
 
 
-Visits = Object.extend('Visits')
-Shortened = Object.extend('Shortened')
+Visit = Object.extend('Visit')
+Link = Object.extend('Link')
 URL_KEY_SIZE = 4
 
 
@@ -94,7 +94,7 @@ def url_shortener_form():
 @app.route('/url_shortener', methods=['POST'])
 @login_required
 def url_shortener():
-    shortened = None
+    link = None
     host = request.url_root
     lurl = request.form['url']
     if request.url_root in lurl:
@@ -104,16 +104,16 @@ def url_shortener():
         if url_is_dead(lurl):
             flash('Given URL is dead.', 'danger')
         else:
-            shortened = gen_short_url(lurl)
-            url = host + shortened.get('short')
+            link = gen_short_url(lurl)
+            url = host + link.get('short')
             buff = BytesIO()
             pyqrcode.create(url).svg(buff, scale=8)
             qrcode = QRCode('qrcode.svg', buff)
-            shortened.set('qrcode', qrcode)
-            shortened.save()
+            link.set('qrcode', qrcode)
+            link.save()
     except (requests.exceptions.InvalidSchema, requests.exceptions.MissingSchema) as e:
         flash('Please enter an URL with valid schema. e.g: http://, https://.', 'danger')
-    return render_template('dashboard/shortener.html', shortened=shortened, host=host)
+    return render_template('dashboard/shortener.html', link=link, host=host)
 
 
 @app.route('/<surl>')
@@ -121,7 +121,7 @@ def go(surl):
     target = get_long(surl)
     if target is None:
         abort(404)
-    visit = Visits()
+    visit = Visit()
     visit.set('target', target)
     ip_address = request.headers.get('x-real-ip')
     if ip_address:
@@ -153,7 +153,7 @@ def url_list():
     current_page = 1
     if request.args.get('page') is not None:
         current_page = request.args.get('page')
-    url_list = Shortened.query.add_descending('createdAT').include('qrcode').limit(20).find()
+    url_list = Link.query.add_descending('createdAT').include('qrcode').limit(20).find()
     return render_template('dashboard/url_list.html', url_list=url_list, current_page=current_page)
 
 
@@ -184,7 +184,7 @@ def gen_random_string(size: int) -> str:
     """
     random_string = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(size))
     try:
-        shortened = Shortened.query.equal_to('short', random_string).first()
+        link = Link.query.equal_to('short', random_string).first()
         return gen_random_string(size + 1)
     except LeanCloudError as e:
         if e.code == 101:
@@ -193,38 +193,38 @@ def gen_random_string(size: int) -> str:
             raise e
 
 
-def get_long(surl: str) -> Shortened:
+def get_long(surl: str) -> Link:
     """Get the source URL for the given URL key if exists."""
-    shortened = None
+    link = None
     try:
-        shortened = Shortened.query.equal_to('short', surl).first()
+        link = Link.query.equal_to('short', surl).first()
     except LeanCloudError as e:
         if e.code == 101:
             lurl = None
         else:
             raise e
-    return shortened
+    return link
 
 
-def gen_short_url(lurl: str) -> Shortened:
+def gen_short_url(lurl: str) -> Link:
     """Generates the URL key for the given source URL.
 
     Args:
-        lurl: The source URL to be shortened.
+        lurl: The source URL to be link.
 
     Returns:
-        surl: The shortened URL key.
+        surl: The link URL key.
     """
-    shortened = Shortened()
+    link = Link()
     surl = gen_random_string(size=URL_KEY_SIZE)
-    shortened.set({"long": lurl, "short": surl})
+    link.set({"long": lurl, "short": surl})
     try:
-        shortened.save()
-        return shortened
+        link.save()
+        return link
     except LeanCloudError as e:
         # A unique field was given a value that is already taken
         if e.code == 137:
-            existing = Shortened.query.equal_to('long', lurl).first()
+            existing = Link.query.equal_to('long', lurl).first()
             return existing
         else:
             abort(400)
