@@ -242,9 +242,24 @@ def get_geo_info(ip: str) -> dict:
     reader = geolite2.reader()
     raw_info = reader.get(ip)
     geo_info = {}
-    geo_info['continent'] = raw_info['continent']['names']['en']
-    geo_info['country'] = raw_info['country']['names']['en']
-    geo_info['subdivisions'] = [x['names']['en'] for x in raw_info['subdivisions']],
-    geo_info['city'] = raw_info['city']['names']['en']
-    geo_info['location'] = GeoPoint(raw_info['location']['latitude'], raw_info['location']['longitude'])
+    try:
+        geo_info['continent'] = raw_info['continent']['names']['en']
+    except KeyError:
+        geo_info['continent'] = None
+    try:
+        geo_info['country'] = raw_info['country']['names']['en']
+    except KeyError:
+        geo_info['country'] = None
+    try:
+        geo_info['subdivisions'] = [x['names']['en'] for x in raw_info['subdivisions']]
+    except KeyError:
+        geo_info['subdivisions'] = None
+    try:
+        geo_info['city'] = raw_info['city']['names']['en']
+    except KeyError:
+        geo_info['city'] = None
+    try:
+        geo_info['location'] = GeoPoint(raw_info['location']['latitude'], raw_info['location']['longitude'])
+    except KeyError:
+        geo_info['location'] = None
     return geo_info
