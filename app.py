@@ -153,7 +153,7 @@ def url_list():
     current_page = 1
     if request.args.get('page') is not None:
         current_page = request.args.get('page')
-    url_list = Link.query.add_descending('createdAT').include('qrcode').limit(20).find()
+    url_list = Link.query.add_descending('createdAt').include('qrcode').limit(20).find()
     return render_template('dashboard/url_list.html', url_list=url_list, current_page=current_page)
 
 
